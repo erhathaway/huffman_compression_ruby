@@ -189,16 +189,5 @@ def write_file(compressed_data, output_filename)
   puts
 end
 
-def compress(input_filename, output_filename)
-  t1 = Time.now
-  raw_size = File.size(input_filename)*8
-  result = huffman_encoding(input_filename)
-  write_file(result, output_filename)
-  compressed_size = File.size(output_filename)*8
-  t2 = Time.now
-  compression_time = (t2 - t1).round(2)
-  print_result(input_filename, output_filename, raw_size, compressed_size, compression_time)
-end
 
-compress("moby_dick.txt","gold_fish.txt")
 

@@ -1,0 +1,8 @@
+# ignore text files
+*.txt
+# ignore yml files
+*.yml
+
+#ignore data-compression.md file
+data-compression.md
+
