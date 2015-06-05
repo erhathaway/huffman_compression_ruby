@@ -10,19 +10,18 @@ end
 class Decode
 	def self.read(file_in)
   		bin = File.binread(file_in)
-  		bin.unpack('B*')
+  		bin.unpack('B*')[0].split("")
 	end
 	def self.decode(binary, huffman_tree)
-		puts binary[0..20]
+		symbol_hash = {}
+		huffman_tree.each{|obj| symbol_hash[obj.symbol]=obj}
+
 		data = ""
 		head = sort_objects(huffman_tree)[-1]
 		node = head
-		counter = 0
-		# while binary.length > 0
-		bit = binary.shift
-		while counter < 50000
 
-			counter +=1
+		bit = binary.shift
+		while binary.length > 0
 
 			if node.left_child == nil && node.right_child == nil
 				data += node.symbol
@@ -34,44 +33,19 @@ class Decode
 				else
 					child = node.right_child
 				end
-				node = huffman_tree.select{|obj| obj.symbol == child}[0]
+				node = symbol_hash[child]
 			end
 		end
-		puts data
+		data
+	end
+
+	def self.write(data, file_out)
+		File.write(file_out, data)
+	end
+
+	def self.run(file_in, file_out, huffman_tree)
+		binary = read(file_in)
+		data = decode(binary, huffman_tree)
+		write(data,file_out)
 	end
 end
-	# def self.count_frequency(data)
-	#   frequency = Hash.new(0)
-	#   data.each{|item| frequency[item]+=1}
-	#   frequency
-	# end
-
-	# def self.compress(file)
-	# 	f = File.open(file, "r").read
- #  		split_data = self.split_data(f,'')
- #  		# print 'Counting symbol frequency...'
-	#   	freq_data = count_frequency(split_data)
-	#     # print 'Bullding Huffman Tree...'
-	#   	data = HuffmanTree.new(freq_data)
-	#   	data.run
-	#     # print 'Maping binary data to symbols in file...'
-	#    	dic = data.result_hash
-	#   	compressed_data = split_data.map{|x| dic[x]}
-	#     # print 'Preparing data for binary storage...'
-	#   	final_compressed_data = []
-	#     # print '...joining array items'
-	#   	compressed_string = compressed_data.join("")
-	#     final_compressed_data << compressed_string #.slice!(0..-1)
-	#   	final_compressed_data
-	# end
-	# def self.write(compressed_data, output_filename)
-	#   # print 'Writing to file...'
-	#   b = compressed_data.pack('B*'*compressed_data.size)
-	#   File.write(output_filename, b)
-	# end
-	# def self.run(in_file, out_file)
-	# 	compressed_data = self.compress(in_file)
-	# 	write(compressed_data, out_file)
-	# end
-# end
-

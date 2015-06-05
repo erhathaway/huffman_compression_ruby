@@ -28,11 +28,12 @@ end
 
 def decode_huffman(input_filename, output_filename, huffman_data)
   t1 = Time.now
-    binary =  Decode.read(input_filename)[0].split("")
-    Decode.decode(binary, huffman_data)
+    compressed_size = File.size(input_filename)*8
+    Decode.run(input_filename,output_filename,huffman_data)
+    raw_size = File.size(output_filename)*8
   t2 = Time.now
   compression_time = (t2 - t1).round(2)
-  # print_result(input_filename, output_filename, raw_size, compressed_size, compression_time)
+  print_result(input_filename, output_filename, raw_size, compressed_size, compression_time)
 end
 
 encode_huffman("../moby_dick.txt","../gold_fish.txt")
