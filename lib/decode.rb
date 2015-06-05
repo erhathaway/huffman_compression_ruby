@@ -1,5 +1,5 @@
 require 'pry'
-
+require_relative 'huffman_tree'
 
 def sort_objects(list)
 	list = list.sort_by {|object| object.frequency}
@@ -9,10 +9,27 @@ end
 
 class Decode
 	def self.read(file_in)
-  		bin = File.binread(file_in)
-  		bin.unpack('B*')[0].split("")
+  		file 			= File.binread(file_in)
+  		file_contents 	= file.split(" --- ")
+  		file_header 	= file_contents[0]
+  		file_data 		= file_contents[1].unpack('B*')[0].split("")
+  		symbol_list = file_header.split(/(\d+)/)
+		counter=0
+		symbol_freq = {}
+		while counter < symbol_list.length
+			symbol = symbol_list[counter]
+			frequency = symbol_list[counter+1]
+			symbol_freq[symbol]=frequency
+			counter +=2
+		end
+		[symbol_freq, file_data]
 	end
-	def self.decode(binary, huffman_tree)
+	def self.decode(freq_hash, binary)
+
+
+		ht = HuffmanTree.new(freq_hash)
+		huffman_tree = ht.run
+
 		symbol_hash = {}
 		huffman_tree.each{|obj| symbol_hash[obj.symbol]=obj}
 
@@ -43,9 +60,11 @@ class Decode
 		File.write(file_out, data)
 	end
 
-	def self.run(file_in, file_out, huffman_tree)
-		binary = read(file_in)
-		data = decode(binary, huffman_tree)
+	def self.run(file_in, file_out)
+		file_contents = read(file_in)
+		header = file_contents[0]
+		bin = file_contents[1]
+		data = decode(header, bin)
 		write(data,file_out)
 	end
 end
