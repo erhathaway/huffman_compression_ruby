@@ -13,7 +13,10 @@ class Decode
   		file_contents 	= file.split(" --- ")
   		file_header 	= file_contents[0]
   		file_data 		= file_contents[1].unpack('B*')[0].split("")
-  		symbol_list = file_header.split(/(\d+)/)
+  		# puts file_header
+  		# symbol_list = file_header.split(/(\d+)/)
+  		symbol_list = file_header.split("$^$")
+  		# print symbol_list
 		counter=0
 		symbol_freq = {}
 		while counter < symbol_list.length
