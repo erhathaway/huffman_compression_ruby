@@ -40,9 +40,11 @@ class Encode
 	end
 
 	def self.run(in_file, out_file)
+
 		data 		= read(in_file)
 		split_data 	= split_symbols(data,'')
 		symbol_freq = count_frequency(split_data)
+		# print symbol_freq
 		data 		= compress(symbol_freq, split_data)
 		write(symbol_freq, data, out_file) # write compressed data
 	end

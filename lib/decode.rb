@@ -19,30 +19,42 @@ class Decode
 		while counter < symbol_list.length
 			symbol = symbol_list[counter]
 			frequency = symbol_list[counter+1]
-			symbol_freq[symbol]=frequency
+			symbol_freq[symbol]=frequency.to_i
 			counter +=2
 		end
+		print symbol_freq
 		[symbol_freq, file_data]
 	end
 	def self.decode(freq_hash, binary)
-
-
 		ht = HuffmanTree.new(freq_hash)
-		huffman_tree = ht.run
 
+		huffman_tree = ht.run
 		symbol_hash = {}
 		huffman_tree.each{|obj| symbol_hash[obj.symbol]=obj}
 
 		data = ""
-		head = sort_objects(huffman_tree)[-1]
+		head = symbol_hash['head']
+
 		node = head
+		# bit = binary.shift
+		bit = 'start'
+		# bit_fragment = [] #testing
+		# counter = 0 #testing
 
-		bit = binary.shift
+		#notes: binary matches up with expected binary
+		# as soon as it starts the binary.length loop, the bits are not the same as binary.shift!
+		# error showing up b/c not decoding numbers correctly from header
 		while binary.length > 0
-
+			# binding.pry
+			# bit_fragment << bit #testing
 			if node.left_child == nil && node.right_child == nil
 				data += node.symbol
 				node = head
+				# if counter < 10 #testing
+				# 	print bit_fragment #testing
+				# end #testing
+				# bit_fragment = [] #testing
+				# counter +=1
 			else
 				bit = binary.shift
 				if bit == '1'
@@ -53,6 +65,7 @@ class Decode
 				node = symbol_hash[child]
 			end
 		end
+
 		data
 	end
 

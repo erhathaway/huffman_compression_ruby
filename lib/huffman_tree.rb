@@ -25,7 +25,11 @@ class HuffmanTree
 			left_child  = queue.shift
 			right_child = queue.shift
 			#create new parent node name
-			parent_id = 'id_'+new_node_counter.to_s
+			if queue.length == 0
+				parent_id = 'head'
+			else
+				parent_id = 'id_'+new_node_counter.to_s
+			end
 			#crate parent new(name, frequency sum)
 			parent = Node.new(parent_id, left_child.frequency+right_child.frequency)
 			#store name of children in parent
