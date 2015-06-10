@@ -1,13 +1,11 @@
 class Node
 	attr_accessor :parent, :left_child, :right_child, :binary_value
-	def initialize(symbol, frequency)
+	attr_reader :level, :symbol, :frequency
+	
+	def initialize(symbol, frequency, level=0)
 		@symbol = symbol
 		@frequency = frequency
+		@level = level
 	end
-	def symbol
-		@symbol
-	end
-	def frequency
-		@frequency
-	end
+
 end

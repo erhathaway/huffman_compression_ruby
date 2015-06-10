@@ -6,15 +6,18 @@ class HuffmanTree
 
 	def initialize(frequency_values)
 		@init_freq_values = frequency_values
+		#create a node for each symbol in the frequency values list
 		@frequency_objects = []
 		frequency_values.each{|k,v| @frequency_objects << Node.new(k,v) }
+		#the queue is used for generating the huffman tree
 		@queue = @frequency_objects
+		#used for naming non-leaf nodes
 		@new_node_counter = 0
 	end
 
 	def sort_objects(list)
 		list = list.sort_by {|object| object.frequency}
-		list
+		# list
 	end
 
 	def make_parent(queue=@queue, huffman_tree=@frequency_objects, parent_name=@new_node_counter)
@@ -30,8 +33,16 @@ class HuffmanTree
 			else
 				parent_id = 'id_'+new_node_counter.to_s
 			end
+
+			#calc level of node based on children
+			if left_child.level >= right_child.level
+				level = left_child.level + 1
+			else 
+				level = right_child.level + 1
+			end
+
 			#crate parent new(name, frequency sum)
-			parent = Node.new(parent_id, left_child.frequency+right_child.frequency)
+			parent = Node.new(parent_id, left_child.frequency+right_child.frequency, level)
 			#store name of children in parent
 			parent.left_child = left_child.symbol
 			parent.right_child= right_child.symbol
